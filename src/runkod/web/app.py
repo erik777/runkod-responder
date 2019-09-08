@@ -1,12 +1,14 @@
 import os
-from flask import Flask, abort, redirect
-
-from werkzeug.middleware.proxy_fix import ProxyFix
-from runkod.util import assert_env_vars
-from runkod.helper import get_project_name, resolve_path
 
 import requests
+from flask import Flask, abort, redirect, make_response
+from werkzeug.middleware.proxy_fix import ProxyFix
+
 from runkod.db import get_project, get_file
+from runkod.web.helper import get_project_name
+from runkod.helper import resolve_path
+from runkod.util import assert_env_vars
+from datetime import datetime
 
 app = None
 
@@ -22,31 +24,29 @@ def __flask_setup():
     @app.route('/', defaults={'path': ''})
     @app.route('/<path:path>')
     def serve(path):
-
-        project_name = get_project_name()
-
-        project = get_project(project_name)
+        project = get_project(get_project_name())
 
         if project is None:
             abort(404)
 
-        full_path = resolve_path(path)
+        file_path = resolve_path(path)
 
-        rec = get_file(project, full_path)
+        file = get_file(project, file_path)
 
-        if rec is None:
+        if file is None:
             abort(404)
 
-        serve_file = full_path.endswith('index.html')
+        address = file['address']
 
-        address = rec['address']
+        serve_flag = file_path.endswith('.html')
 
-        if serve_file:
+        if serve_flag:
             resp = requests.get(address)
+            response = make_response(resp.content)
+            response.headers.set('Content-Type', file['type'])
+            return response
 
-            return resp.text
-        else:
-            return redirect(address, code=308)
+        return redirect(address, 301)
 
 
 def __run_dev_server():

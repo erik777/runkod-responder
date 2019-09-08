@@ -1,11 +1,5 @@
-import os
-from flask import request
 import mimetypes
 from typing import Optional
-
-
-def get_project_name():
-    return os.environ.get('TEST_PROJECT') or request.host
 
 
 def resolve_path(p: str) -> Optional[str]:
