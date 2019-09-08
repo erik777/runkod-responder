@@ -5,10 +5,9 @@ from flask import Flask, abort, redirect, make_response
 from werkzeug.middleware.proxy_fix import ProxyFix
 
 from runkod.db import get_project, get_file
-from runkod.web.helper import get_project_name
 from runkod.helper import resolve_path
 from runkod.util import assert_env_vars
-from datetime import datetime
+from runkod.web.helper import get_project_name
 
 app = None
 
