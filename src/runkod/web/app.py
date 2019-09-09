@@ -1,7 +1,7 @@
 import os
 
 import requests
-from flask import Flask, abort, redirect, make_response
+from flask import Flask, abort, redirect, make_response, request
 from werkzeug.middleware.proxy_fix import ProxyFix
 
 from runkod.db import get_project, get_file
@@ -28,7 +28,7 @@ def __flask_setup():
         if project is None:
             abort(404)
 
-        file_path = resolve_path(path)
+        file_path = resolve_path(project, path)
 
         file = get_file(project, file_path)
 
