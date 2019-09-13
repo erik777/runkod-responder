@@ -9,7 +9,7 @@ assert sys.version_info[0] == 3 and sys.version_info[1] >= 7, 'Requires Python 3
 
 os.sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), 'src')))
 
-from runkod.util import assert_env_vars
+from responder.util import assert_env_vars
 
 assert_env_vars('MONGO_URI')
 
@@ -27,11 +27,11 @@ def main():
     cmd = args.cmd
 
     if cmd == 'web':
-        from runkod.web.app import main
+        from responder.web.app import main
         main()
 
     if cmd == 'test':
-        from runkod.test import do_tests
+        from responder.test import do_tests
         do_tests()
 
 

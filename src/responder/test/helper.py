@@ -1,6 +1,6 @@
 import unittest
 
-from runkod.helper import resolve_path
+from responder.helper import resolve_path
 from unittest.mock import patch
 from unittest.mock import Mock
 
@@ -31,7 +31,7 @@ class HelperTestCase(unittest.TestCase):
         expected = '/main.js'
         self.assertEqual(result, expected)
 
-    @patch('runkod.helper.get_file', return_value=Mock())
+    @patch('responder.helper.get_file', return_value=Mock())
     def test_01(self, mocked):
         mocked.side_effect = [
             None,
@@ -45,7 +45,7 @@ class HelperTestCase(unittest.TestCase):
         expected = '/foo/bar/baz/maz/'
         self.assertEqual(result, expected)
 
-    @patch('runkod.helper.get_file', return_value=Mock())
+    @patch('responder.helper.get_file', return_value=Mock())
     def test_02(self, mocked):
         mocked.side_effect = [
             {'id': 'xx'}
@@ -55,7 +55,7 @@ class HelperTestCase(unittest.TestCase):
         expected = '/foo/bar/baz/maz/index.html'
         self.assertEqual(result, expected)
 
-    @patch('runkod.helper.get_file', return_value=Mock())
+    @patch('responder.helper.get_file', return_value=Mock())
     def test_03(self, mocked):
         mocked.side_effect = [
             None,
@@ -70,7 +70,7 @@ class HelperTestCase(unittest.TestCase):
         expected = '/foo/index.html'
         self.assertEqual(result, expected)
 
-    @patch('runkod.helper.get_file', return_value=Mock())
+    @patch('responder.helper.get_file', return_value=Mock())
     def test_03(self, mocked):
         mocked.side_effect = [
             None,
@@ -85,7 +85,7 @@ class HelperTestCase(unittest.TestCase):
         expected = '/index.html'
         self.assertEqual(result, expected)
 
-    @patch('runkod.helper.get_file', return_value=Mock())
+    @patch('responder.helper.get_file', return_value=Mock())
     def test_03(self, mocked):
         mocked.side_effect = [
             None,
