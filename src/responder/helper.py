@@ -1,7 +1,7 @@
 import mimetypes
 from typing import Optional
-from runkod.constants import PATH_SEPARATOR, DIR_INDEX, DIR_INDEX_SEARCH_TRY
-from runkod.db import get_file
+from responder.constants import PATH_SEPARATOR, DIR_INDEX, DIR_INDEX_SEARCH_TRY
+from responder.db import get_file
 
 
 def resolve_path(project: dict, p: str) -> Optional[str]:

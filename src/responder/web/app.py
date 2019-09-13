@@ -4,10 +4,10 @@ import requests
 from flask import Flask, abort, redirect, make_response, request
 from werkzeug.middleware.proxy_fix import ProxyFix
 
-from runkod.db import get_project, get_file
-from runkod.helper import resolve_path
-from runkod.util import assert_env_vars
-from runkod.web.helper import get_project_name
+from responder.db import get_project, get_file
+from responder.helper import resolve_path
+from responder.util import assert_env_vars
+from responder.web.helper import get_project_name
 
 app = None
 
