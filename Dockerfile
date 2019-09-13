@@ -12,4 +12,4 @@ RUN pip3 install -r ${APP_DIR}/requirements.txt
 
 EXPOSE 5001
 
-CMD ["gunicorn", "--workers", "4", "--bind", "0.0.0.0:5001", "--chdir", "./src/responder/web/", "--pythonpath", "${APP_DIR}/src", "app:app"]
+CMD ["gunicorn", "--workers", "4", "--bind", "0.0.0.0:5001", "--chdir", "./src/responder/web/", "--pythonpath", "./src", "app:app"]
