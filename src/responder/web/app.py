@@ -37,15 +37,12 @@ def __flask_setup():
 
         address = file['address']
 
-        serve_flag = file_path.endswith('.html')
-
-        if serve_flag:
-            resp = requests.get(address)
-            response = make_response(resp.content)
+        resp = requests.get(address)
+        response = make_response(resp.content)
+        if file['type']:
             response.headers.set('Content-Type', file['type'])
-            return response
 
-        return redirect(address, 301)
+        return response
 
 
 def __run_dev_server():
