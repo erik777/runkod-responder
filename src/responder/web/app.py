@@ -26,7 +26,6 @@ def __flask_setup():
         project = get_project(get_project_name())
 
         if project is None:
-            print("project")
             abort(404)
 
         file_path = resolve_path(project, path)
@@ -34,7 +33,6 @@ def __flask_setup():
         file = get_file(project, file_path)
 
         if file is None:
-            print("file")
             abort(404)
 
         address = file['address']

@@ -10,7 +10,6 @@ db = client.get_default_database()
 
 def get_project(project_name: str) -> Optional[dict]:
     filters = {'radiksType': 'project', 'name': project_name}
-    print(filters)
     return db['radiks-server-data'].find_one(filters, sort=[('createdAt', pymongo.DESCENDING)])
 
 
