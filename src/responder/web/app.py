@@ -1,7 +1,9 @@
 import os
+import tempfile
 
 import requests
-from flask import Flask, abort, redirect, make_response, request
+from flask import Flask, abort, make_response
+from flask_caching import Cache
 from werkzeug.middleware.proxy_fix import ProxyFix
 
 from responder.db import get_project, get_file
@@ -10,15 +12,21 @@ from responder.util import assert_env_vars
 from responder.web.helper import get_project_name
 
 app = None
+cache = None
 
 
 def __flask_setup():
-    global app
+    global app, cache
 
     app = Flask(__name__, static_folder=None)
     app.config['MONGO_URI'] = os.environ.get('MONGO_URI')
 
     app.wsgi_app = ProxyFix(app.wsgi_app)
+
+    cache_config = {'CACHE_TYPE': 'filesystem', 'CACHE_THRESHOLD': 10000,
+                    'CACHE_DIR': os.path.join(tempfile.gettempdir(), 'responder')}
+    cache = Cache(with_jinja2_ext=False, config=cache_config)
+    cache.init_app(app)
 
     @app.route('/', defaults={'path': ''})
     @app.route('/<path:path>')
@@ -35,10 +43,13 @@ def __flask_setup():
         if file is None:
             abort(404)
 
-        address = file['address']
+        rv = cache.get(file['name'])
+        if rv is None:
+            resp = requests.get(file['address'])
+            rv = resp.content
+            cache.set(file['name'], rv)
 
-        resp = requests.get(address)
-        response = make_response(resp.content)
+        response = make_response(rv)
         if file['type']:
             response.headers.set('Content-Type', file['type'])
 
