@@ -2,7 +2,7 @@ import os
 import tempfile
 
 import requests
-from flask import Flask, abort, make_response
+from flask import Flask, abort, make_response, redirect
 from flask_caching import Cache
 from werkzeug.middleware.proxy_fix import ProxyFix
 
@@ -42,6 +42,13 @@ def __flask_setup():
 
         if file is None:
             abort(404)
+
+        address = file['address']
+
+        serve_flag = file['type'] in ['text/html', 'text/javascript', 'text/css']
+
+        if not serve_flag:
+            return redirect(address, 301)
 
         rv = cache.get(file['name'])
         if rv is None:
