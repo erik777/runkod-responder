@@ -2,7 +2,7 @@ import os
 import tempfile
 
 import requests
-from flask import Flask, abort, make_response, redirect
+from flask import Flask, abort, make_response
 from flask_caching import Cache
 from werkzeug.middleware.proxy_fix import ProxyFix
 
