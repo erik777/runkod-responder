@@ -43,13 +43,6 @@ def __flask_setup():
         if file is None:
             abort(404)
 
-        address = file['address']
-
-        serve_flag = file['type'] in ['text/html', 'text/javascript', 'text/css']
-
-        if not serve_flag:
-            return redirect(address, 301)
-
         rv = cache.get(file['name'])
         if rv is None:
             resp = requests.get(file['address'])
