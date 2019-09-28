@@ -33,10 +33,6 @@ def __flask_setup():
     @app.route('/', defaults={'path': ''})
     @app.route('/<path:path>')
     def serve(path):
-        # Always use https except test environment
-        if request.scheme != 'https' and os.environ.get('TEST_PROJECT') is None:
-            loc = 'https://{}'.format(request.host)
-            return redirect(loc, code=301)
 
         project = get_project(get_project_name())
 
