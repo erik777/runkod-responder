@@ -10,6 +10,8 @@ from responder.db import get_project, get_file
 from responder.helper import resolve_path
 from responder.util import assert_env_vars
 from responder.web.helper import get_project_name
+from responder.web.template import *
+from responder.constants import *
 
 app = None
 cache = None
@@ -31,25 +33,39 @@ def __flask_setup():
     @app.route('/', defaults={'path': ''})
     @app.route('/<path:path>')
     def serve(path):
+        # Always use https except test environment
+        if request.scheme != 'https' and os.environ.get('TEST_PROJECT') is None:
+            loc = 'https://{}'.format(request.host)
+            return redirect(loc, code=301)
+
         project = get_project(get_project_name())
 
-        if project is None:
-            abort(404)
+        if project is None or project['status'] == PROJECT_STATUS_OFF:
+            response: Response = make_response(no_project)
+            response.status_code = 404
+            response.content_type = 'text/html'
+            return response
+
+        if project['status'] == PROJECT_STATUS_MAINTENANCE:
+            response: Response = make_response(in_maintenance)
+            response.status_code = 503
+            response.content_type = 'text/html'
+            return response
 
         file_path = resolve_path(project, path)
 
         file = get_file(project, file_path)
 
         if file is None:
-            abort(404)
+            response: Response = make_response(no_file)
+            response.status_code = 404
+            response.content_type = 'text/html'
+            return response
 
-        server_flag = file['type'] in ['text/html', 'text/css', 'text/javascript']
+        server_flag = file['name'].endswith('.html')
 
         if not server_flag:
-            return redirect(file['address'], code=307)
-
-        if request.if_none_match and file['name'] in request.if_none_match:
-            return Response(status=304)
+            return redirect(file['address'], code=303)
 
         rv = cache.get(file['name'])
         if rv is None:

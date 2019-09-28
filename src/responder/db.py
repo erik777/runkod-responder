@@ -14,6 +14,6 @@ def get_project(project_name: str) -> Optional[dict]:
 
 
 def get_file(project: dict, path: str) -> Optional[dict]:
-    filters = {'radiksType': 'file', 'project': project['_id'], 'tag': project['tag'], 'fullPath': path,
-               'deleted': False}
+    filters = {'radiksType': 'file', 'project': project['_id'], 'username': project['username'],
+               'tag': project['tag'], 'fullPath': path, 'deleted': False}
     return db['radiks-server-data'].find_one(filters, sort=[('createdAt', pymongo.DESCENDING)])
