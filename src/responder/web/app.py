@@ -9,7 +9,7 @@ from werkzeug.middleware.proxy_fix import ProxyFix
 from responder.db import get_project, get_file
 from responder.helper import resolve_path
 from responder.util import assert_env_vars
-from responder.web.helper import get_project_name
+from responder.web.helper import get_project_name, can_serve
 from responder.web.template import *
 from responder.constants import *
 
@@ -40,12 +40,14 @@ def __flask_setup():
 
         project = get_project(get_project_name())
 
+        # Off project
         if project is None or project['status'] == PROJECT_STATUS_OFF:
             response: Response = make_response(no_project)
             response.status_code = 404
             response.content_type = 'text/html'
             return response
 
+        # In maintenance mode
         if project['status'] == PROJECT_STATUS_MAINTENANCE:
             response: Response = make_response(in_maintenance)
             response.status_code = 503
@@ -56,15 +58,15 @@ def __flask_setup():
 
         file = get_file(project, file_path)
 
+        # File not found
         if file is None:
             response: Response = make_response(no_file)
             response.status_code = 404
             response.content_type = 'text/html'
             return response
 
-        server_flag = file['name'].endswith('.html')
-
-        if not server_flag:
+        # Redirect non-servable file
+        if not can_serve(file):
             return redirect(file['address'], code=303)
 
         rv = cache.get(file['name'])
