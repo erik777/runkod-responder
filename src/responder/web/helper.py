@@ -8,4 +8,4 @@ def get_project_name() -> str:
 
 
 def can_serve(file: dict) -> bool:
-    return file['name'].endswith('.html') and file['size'] <= 128000
+    return file['name'].endswith(('.html', '.css')) and file['size'] <= 256000

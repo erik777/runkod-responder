@@ -12,6 +12,8 @@ from responder.util import assert_env_vars
 from responder.web.helper import get_project_name, can_serve
 from responder.web.template import *
 from responder.constants import *
+from datetime import datetime, timedelta
+import pytz
 
 app = None
 cache = None
@@ -65,6 +67,9 @@ def __flask_setup():
             response.content_type = 'text/html'
             return response
 
+        if request.if_none_match and file['name'] in request.if_none_match:
+            return Response(status=304)
+
         # Redirect non-servable file
         if not can_serve(file):
             return redirect(file['address'], code=303)
@@ -76,9 +81,17 @@ def __flask_setup():
             cache.set(file['name'], rv)
 
         response: Response = make_response(rv)
+
         response.set_etag(file['name'])
+
         if file['type']:
             response.headers.set('Content-Type', file['type'])
+
+        try:
+            last_modified = datetime.fromtimestamp(file['updatedAt'] / 1000, pytz.timezone('GMT'))  #
+            response.headers.add('Last-Modified', last_modified.strftime('%a, %d %b %Y %H:%M:%S GMT'))
+        except ValueError:
+            pass
 
         return response
 
