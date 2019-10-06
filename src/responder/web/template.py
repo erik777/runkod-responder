@@ -52,6 +52,6 @@ base_temp = """
 
 no_project = base_temp.replace('<--content-->', 'Nothing here')
 
-no_file = base_temp.replace('<--content-->', 'No such a resource')
+no_file = base_temp.replace('<--content-->', 'Nothing here')
 
 in_maintenance = base_temp.replace('<--content-->', ' In Maintenance <br/><br/> Please check back shortly')
