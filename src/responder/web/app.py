@@ -27,7 +27,7 @@ def __flask_setup():
 
     app.wsgi_app = ProxyFix(app.wsgi_app)
 
-    cache_config = {'CACHE_TYPE': 'filesystem', 'CACHE_THRESHOLD': 10000,
+    cache_config = {'CACHE_TYPE': 'redis', 'CACHE_THRESHOLD': 10000,
                     'CACHE_DIR': os.path.join(tempfile.gettempdir(), 'responder')}
     cache = Cache(with_jinja2_ext=False, config=cache_config)
     cache.init_app(app)
