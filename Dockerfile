@@ -1,5 +1,7 @@
 FROM python:3.6
 
+ARG APP_WORKERS=4
+
 ENV APP_DIR /deploy
 
 RUN echo "$APP_DIR"
