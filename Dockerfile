@@ -16,4 +16,4 @@ ENV PYTHONPATH "${PYTHONPATH}:./src"
 
 EXPOSE 5001
 
-CMD ["gunicorn", "--workers", "4", "--bind", "0.0.0.0:5001", "--chdir", "./src/responder/web/", "app:app"]
+CMD ["gunicorn", "--workers", "${APP_WORKERS}", "--bind", "0.0.0.0:5001", "--chdir", "./src/responder/web/", "app:app"]
