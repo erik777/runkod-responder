@@ -50,7 +50,7 @@ base_temp = """
 </html>
 """
 
-no_project = base_temp.replace('<--content-->', 'Nothing here')
+no_project = base_temp.replace('<--content-->', 'No such a project')
 
 no_file = base_temp.replace('<--content-->', 'Nothing here')
 
