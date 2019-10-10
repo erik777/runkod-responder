@@ -15,6 +15,8 @@ from responder.util import assert_env_vars
 from responder.web.helper import get_project_name, can_serve
 from responder.web.template import *
 
+assert_env_vars('CACHE_TIMEOUT', 'CACHE_THRESHOLD')
+
 app = None
 cache = None
 
@@ -23,11 +25,12 @@ def __flask_setup():
     global app, cache
 
     app = Flask(__name__, static_folder=None)
-    app.config['MONGO_URI'] = os.environ.get('MONGO_URI')
 
     app.wsgi_app = ProxyFix(app.wsgi_app)
 
-    cache_config = {'CACHE_TYPE': 'filesystem', 'CACHE_THRESHOLD': 10000,
+    cache_config = {'CACHE_TYPE': 'filesystem',
+                    'CACHE_THRESHOLD': int(os.environ.get('CACHE_THRESHOLD')),
+                    'CACHE_DEFAULT_TIMEOUT': int(os.environ.get('CACHE_TIMEOUT')),
                     'CACHE_DIR': os.path.join(tempfile.gettempdir(), 'responder')}
     cache = Cache(with_jinja2_ext=False, config=cache_config)
     cache.init_app(app)
