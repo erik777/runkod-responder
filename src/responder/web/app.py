@@ -1,3 +1,4 @@
+import mimetypes
 import os
 import tempfile
 from datetime import datetime
@@ -14,7 +15,6 @@ from responder.helper import resolve_path
 from responder.util import assert_env_vars
 from responder.web.helper import get_project_name, can_serve
 from responder.web.template import *
-import mimetypes
 
 assert_env_vars('CACHE_TIMEOUT', 'CACHE_THRESHOLD')
 
