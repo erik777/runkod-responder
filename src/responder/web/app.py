@@ -14,6 +14,7 @@ from responder.helper import resolve_path
 from responder.util import assert_env_vars
 from responder.web.helper import get_project_name, can_serve
 from responder.web.template import *
+import mimetypes
 
 assert_env_vars('CACHE_TIMEOUT', 'CACHE_THRESHOLD')
 
@@ -87,8 +88,10 @@ def __flask_setup():
 
         response.set_etag(file['name'])
 
-        if file['type']:
-            response.headers.set('Content-Type', file['type'])
+        mime_type = mimetypes.guess_type(file['name'])[0]
+
+        if mime_type:
+            response.headers.set('Content-Type', mime_type)
 
         try:
             last_modified = datetime.fromtimestamp(file['updatedAt'] / 1000, pytz.timezone('GMT'))  #
