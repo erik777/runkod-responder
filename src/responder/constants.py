@@ -10,6 +10,7 @@ MB = 1024 * 1024
 
 FILE_SERVE_RULES = {
     'html': MB / 2,
-    'css': MB,
-    'js': MB * 10
+    'css': MB * 2,
+    'js': MB * 10,
+    'svg': MB / 2
 }
