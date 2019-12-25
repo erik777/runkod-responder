@@ -41,7 +41,7 @@ def __flask_setup():
     def serve(path):
         # Always use https in production env
         if os.environ.get('TEST_PROJECT') is None and request.headers['X-Forwarded-Proto'] != 'https':
-            loc = 'https://{}'.format(request.host)
+            loc = request.url.replace('http://', 'https://', 1)
             return redirect(loc, code=301)
 
         project = get_project(get_project_name())
