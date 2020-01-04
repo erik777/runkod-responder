@@ -99,6 +99,10 @@ def __flask_setup():
         except ValueError:
             pass
 
+        # opt in header for blockstack apps
+        if get_file(project, '/_blockstack'):
+            response.headers.set("can't-be-evil", 'true')
+
         return response
 
 
