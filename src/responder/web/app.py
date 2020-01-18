@@ -74,7 +74,7 @@ def __flask_setup():
         if request.if_none_match and file['name'] in request.if_none_match:
             return Response(status=304)
 
-        # Redirect non-servable file
+        # Redirect non servable file
         if not can_serve(file):
             return redirect(file['address'], code=303)
 
@@ -94,7 +94,8 @@ def __flask_setup():
             response.headers.set('Content-Type', mime_type)
 
         try:
-            last_modified = datetime.fromtimestamp(file['updatedAt'] / 1000, pytz.timezone('GMT'))  #
+            # convert javascript timestamp to unix timestamp
+            last_modified = datetime.fromtimestamp(file['updatedAt'] / 1000, pytz.timezone('GMT'))
             response.headers.add('Last-Modified', last_modified.strftime('%a, %d %b %Y %H:%M:%S GMT'))
         except ValueError:
             pass
