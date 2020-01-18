@@ -8,6 +8,7 @@ PROJECT_STATUS_OFF = 3
 
 MB = 1024 * 1024
 
+# this will change when gaia support gzip encoding
 FILE_SERVE_RULES = {
     'html': MB * 2,
     'css': MB * 4,
