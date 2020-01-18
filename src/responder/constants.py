@@ -9,8 +9,7 @@ PROJECT_STATUS_OFF = 3
 MB = 1024 * 1024
 
 FILE_SERVE_RULES = {
-    'html': MB / 2,
-    'css': MB * 2,
-    'js': MB * 10,
-    'svg': MB / 2
+    'html': MB * 2,
+    'css': MB * 4,
+    'js': MB * 10
 }
