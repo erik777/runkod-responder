@@ -10,7 +10,7 @@ from flask_caching import Cache
 from werkzeug.middleware.proxy_fix import ProxyFix
 
 from responder.constants import *
-from responder.db import get_project, get_file
+from responder.db import get_project, get_redirected_project, get_file
 from responder.helper import resolve_path
 from responder.util import assert_env_vars
 from responder.web.helper import get_project_name, can_serve
@@ -59,6 +59,13 @@ def __flask_setup():
             response.status_code = 503
             response.content_type = 'text/html'
             return response
+
+        # Handle redirection
+        if 'redirectTo' in project and project['redirectTo'] != '':
+            r_project = get_redirected_project(project)
+            if r_project is not None:
+                loc = 'https://{}'.format(r_project['name'])
+                return redirect(loc, code=301)
 
         file_path = resolve_path(project, path)
 
