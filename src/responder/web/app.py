@@ -65,7 +65,7 @@ def __flask_setup():
             r_project = get_redirected_project(project)
             if r_project is not None:
                 loc = 'https://{}'.format(r_project['name'])
-                return redirect(loc, code=301)
+                return redirect(loc, code=307)
 
         file_path = resolve_path(project, path)
 
